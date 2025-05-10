@@ -10,7 +10,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { EDUCATION_OPTIONS, INDIAN_STATES } from "@/lib/constants";
 import { apiRequest } from "@/lib/queryClient";
-import { useRouter } from "wouter";
+
+// Simple navigation function
+const navigate = (path: string) => {
+  window.history.pushState(null, "", path);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+};
 
 const registerSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -39,7 +44,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export function RegisterForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const [, navigate] = useRouter();
+  // navigation handled by our custom navigate function
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
